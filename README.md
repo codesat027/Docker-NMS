@@ -38,11 +38,6 @@ Docker-NMS/
 
 Backend reads OpenNMS connection details from `Backend/.env`:
 
-```
-OPENNMS_BASE_URL=http://opennms:8980/opennms
-OPENNMS_USERNAME=admin
-OPENNMS_PASSWORD=admin
-OPENNMS_FOREIGN_SOURCE=PulseMonitor
-```
+
 
 > This file is gitignored — create it manually on the server before running.
