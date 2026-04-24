@@ -1,5 +1,5 @@
 // import "./App.css";
-// import Details from "./components/details";
+// import Details from "./components/Details";
 // import SearchBar from "./components/SearchBar";
 // import SideBar from "./components/SideBar";
 
@@ -18,7 +18,7 @@
 // export default App;
 
 // import "./App.css";
-// import Details from "./components/details";
+// import Details from "./components/Details";
 // // import Alarms from "./components/Alarms";
 // // import SearchBar from "./components/SearchBar";
 // // import SideBar from "./components/SideBar";
@@ -64,9 +64,6 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AppSidebar } from "./components/SideBar";
 import { useAuth } from "./Context/useAuth";
-
-// existing component
-import Details from "./components/details";
 
 // new pages — create these as empty placeholders for now
 import DashboardPage  from "./pages/DashboardPage";
