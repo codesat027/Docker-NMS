@@ -1,0 +1,43 @@
+[ ] DISCOVERY FEATURES
+
+    [ ] MANUAL NODE ADD (enhanced)
+        [ ] Form fields: label, IP address, location, type, SNMP community string
+        [ ] Django calls OpenNMS requisitions API with full details
+        [ ] After node added, auto-trigger import so OpenNMS starts polling immediately
+        [ ] Return node ID back to frontend on success
+
+    [ ] AUTO DISCOVERY
+        [ ] models.py
+            [ ] DiscoveryJob model
+                [ ] ip_range field (e.g. 192.168.1.0/24)
+                [ ] status field (pending, running, completed, failed)
+                [ ] discovered_count field
+                [ ] created_by FK to User
+                [ ] started_at, completed_at fields
+        [ ] serializers.py
+            [ ] DiscoveryJobSerializer
+        [ ] opennms.py helpers
+            [ ] trigger_discovery(ip_range) — calls OpenNMS discovery API
+            [ ] fetch_discovery_status() — polls for new nodes
+        [ ] views.py
+            [ ] DiscoveryView
+                [ ] POST /api/discovery/ — takes ip_range, triggers scan
+                [ ] GET  /api/discovery/ — list all past discovery jobs
+            [ ] DiscoveryStatusView
+                [ ] GET /api/discovery/<id>/status/ — check job progress
+                [ ] Returns newly found nodes since job started
+        [ ] tasks.py
+            [ ] run_discovery(job_id, ip_range) Celery task
+                [ ] Calls OpenNMS to set discovery config
+                [ ] Waits and polls for new nodes
+                [ ] Updates DiscoveryJob status + discovered_count
+                [ ] Marks complete when scan finishes
+        [ ] urls.py
+            [ ] POST /api/discovery/
+            [ ] GET  /api/discovery/
+            [ ] GET  /api/discovery/<id>/status/
+        [ ] makemigrations + migrate
+        [ ] TEST
+            [ ] Trigger discovery with valid IP range
+            [ ] Job status updates correctly
+            [ ] New nodes appear in node list after discovery

@@ -1,0 +1,78 @@
+services:
+
+  # ─── OpenNMS Database ────────────────────────────────────────────────────────
+  database:
+    image: postgres:14
+    container_name: opennms-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - TZ=Asia/Kolkata
+    volumes:
+      - nms-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ─── OpenNMS ─────────────────────────────────────────────────────────────────
+  opennms:
+    image: opennms/horizon:latest
+    container_name: opennms-server
+    command: ["-s"]
+    ports:
+      - "8980:8980"
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - POSTGRES_HOST=database
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - TZ=Asia/Kolkata
+    volumes:
+      - nms-etc:/opt/opennms/etc
+      - nms-rrd:/opt/opennms/share/rrd
+    restart: unless-stopped
+
+  # ─── Django Backend ───────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: nms-backend
+    environment:
+      - OPENNMS_BASE_URL=http://opennms:8980/opennms
+      - OPENNMS_USERNAME=admin
+      - OPENNMS_PASSWORD=admin
+      - OPENNMS_FOREIGN_SOURCE=PulseMonitor
+      - DEBUG=False
+      - ALLOWED_HOSTS=*
+      - CORS_ALLOW_ALL_ORIGINS=True
+      - DJANGO_SECRET_KEY=change-this-to-a-long-random-secret-in-production
+      - DB_PATH=/data/db.sqlite3
+    volumes:
+      - backend-data:/data
+    depends_on:
+      - opennms
+    restart: unless-stopped
+
+  # ─── React Frontend (Nginx) ───────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: nms-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  nms-db-data:
+  nms-etc:
+  nms-rrd:
+  backend-data:

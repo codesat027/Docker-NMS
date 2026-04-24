@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.Python
+
+# Django
+Backend/db.sqlite3
+Backend/staticfiles/
+Backend/media/
+
+# Environment files (contain credentials - never commit these)
+Backend/.env
+*.env.local
+
+# Node
+Frontend/node_modules/
+Frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

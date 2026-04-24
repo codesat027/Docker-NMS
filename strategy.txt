@@ -1,0 +1,28 @@
+src/
+├── api/
+│   └── opennms.js      
+├── components/
+│   ├── Dashboard.jsx   
+│   ├── NodeCard.jsx    
+│   ├── NodeDetails.jsx  --> Details.jsx
+│   ├── SearchBar.jsx   
+│   └── ProtectedRoute.jsx  <-- Prevents viewing dashboard without login
+├── context/
+│   └── AuthContext.jsx     <--  Stores the client/user session
+├── hooks/
+│   └── useNodes.js     
+├── pages/
+│   └── LoginPage.jsx       <--  The login screen
+├── App.jsx             
+├── App.css             
+└── main.jsx
+-------------------------------------------------------------------------------------
+
+
+
+
+-- install tailwind..
+
+
+
+#the cors issue is not completely solved the window.location.origin method just works in dev need to fix that

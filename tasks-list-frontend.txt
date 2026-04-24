@@ -1,0 +1,149 @@
+FRONTEND WIRING TASK LIST
+=========================
+
+[ ] AUTH SETUP
+    [ ] Install dependencies
+        [ ] npm install axios react-router-dom
+    [ ] Create AuthContext
+        [ ] src/context/AuthContext.jsx
+        [ ] store access_token + refresh_token in localStorage
+        [ ] login() function — POST /api/auth/login/
+        [ ] logout() function — POST /api/auth/logout/
+        [ ] user state (username, role)
+        [ ] isAuthenticated boolean
+    [ ] Create ProtectedRoute component
+        [ ] src/components/ProtectedRoute.jsx
+        [ ] redirect to /login if not authenticated
+    [ ] Wire AuthContext to main.jsx
+        [ ] wrap App with AuthProvider
+    [ ] Update opennms.js
+        [ ] getAuthHeaders() reads token from localStorage
+        [ ] auto redirect to login on 401 response
+    [ ] TEST
+        [ ] login works, token stored
+        [ ] protected route redirects when no token
+        [ ] protected route allows when token exists
+
+-----------------------------------------
+
+[ ] HOOKS WIRING
+    [ ] useAlarms.js
+        [ ] remove opennms-js import
+        [ ] replace with api.get("/alarms/")
+        [ ] support filters (severity)
+        [ ] TEST → returns alarm data
+    [ ] useNodes.js
+        [ ] api.get("/nodes/")
+        [ ] support filters (search, type, status)
+        [ ] addNode() → api.post("/nodes/")
+        [ ] updateNode() → api.patch("/nodes/<id>/")
+        [ ] deleteNode() → api.delete("/nodes/<id>/")
+        [ ] TEST → returns node list
+    [ ] useDashboard.js
+        [ ] api.get("/dashboard/")
+        [ ] TEST → returns counts
+    [ ] useOutages.js
+        [ ] api.get("/outages/")
+        [ ] support ?current=true filter
+        [ ] support ?nodeId= filter
+        [ ] TEST → returns outage list
+    [ ] useThresholds.js
+        [ ] api.get("/thresholds/")
+        [ ] createRule() → api.post("/thresholds/")
+        [ ] updateRule() → api.patch("/thresholds/<id>/")
+        [ ] deleteRule() → api.delete("/thresholds/<id>/")
+        [ ] TEST → CRUD works
+    [ ] useNodeResources.js
+        [ ] api.get("/nodes/<id>/resources/")
+        [ ] used in threshold form metric dropdown
+        [ ] TEST → returns metrics for node
+    [ ] useDiscovery.js
+        [ ] startDiscovery() → api.post("/discovery/")
+        [ ] pollStatus() → api.get("/discovery/<id>/status/")
+        [ ] polls every 5 seconds while status = running
+        [ ] TEST → job created, status updates
+    [ ] useActionLog.js
+        [ ] api.get("/actions/")
+        [ ] resolveAction() → api.patch("/actions/<id>/")
+        [ ] TEST → returns action log
+    [ ] useReports.js
+        [ ] downloadCSV() → window.open("/api/reports/csv/")
+        [ ] downloadPDF() → window.open("/api/reports/pdf/")
+        [ ] supports period + type params
+        [ ] TEST → files download correctly
+
+-----------------------------------------
+
+[ ] PAGES WIRING
+    [ ] Login page
+        [ ] calls useAuth().login()
+        [ ] redirects to /dashboard on success
+        [ ] shows error on wrong credentials
+        [ ] TEST → login flow works end to end
+    [ ] Dashboard page
+        [ ] uses useDashboard()
+        [ ] shows total_nodes, nodes_up, nodes_down
+        [ ] shows critical, major, minor alarm counts
+        [ ] TEST → real data showing
+    [ ] Nodes page
+        [ ] uses useNodes()
+        [ ] filter bar wired (search, type)
+        [ ] add node form wired
+        [ ] edit node form wired
+        [ ] delete button wired
+        [ ] CSV upload wired
+        [ ] TEST → full CRUD working
+    [ ] Alarms page
+        [ ] uses useAlarms()
+        [ ] severity filter wired
+        [ ] TEST → alarms showing with filter
+    [ ] Outages page
+        [ ] uses useOutages()
+        [ ] current only toggle wired
+        [ ] TEST → outages showing
+    [ ] Thresholds page
+        [ ] uses useThresholds()
+        [ ] uses useNodes() for node dropdown
+        [ ] uses useNodeResources() for metric dropdown
+        [ ] create rule form wired
+        [ ] toggle active wired
+        [ ] delete wired
+        [ ] TEST → full CRUD working
+    [ ] Reports page
+        [ ] uses useReports()
+        [ ] period dropdown wired
+        [ ] type dropdown wired
+        [ ] CSV download button wired
+        [ ] PDF download button wired
+        [ ] TEST → files download
+    [ ] Action Log page
+        [ ] uses useActionLog()
+        [ ] resolve button wired
+        [ ] TEST → log showing, resolve works
+    [ ] Discovery page
+        [ ] uses useDiscovery()
+        [ ] IP range input wired
+        [ ] start button wired
+        [ ] live status polling wired
+        [ ] TEST → discovery job created
+
+-----------------------------------------
+
+[ ] FINAL CHECKS
+    [ ] No hardcoded URLs anywhere
+    [ ] All hooks handle loading state
+    [ ] All hooks handle error state
+    [ ] 401 response redirects to login
+    [ ] JWT token attached to all requests
+    [ ] Flip IsAuthenticated in Django settings
+    [ ] Test every endpoint rejects no token
+    [ ] Test every endpoint works with token
+
+
+
+    //make docker file for frontend and backend
+    //make final docker file 
+    //upload this code to private repo  
+
+
+    

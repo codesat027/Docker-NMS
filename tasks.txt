@@ -1,0 +1,124 @@
+PULSE MONITOR - BACKEND TASK TRACKER
+=====================================
+
+[✅] SETUP
+    [✅] django-admin startproject pulse_monitor
+    [✅] python manage.py startapp users
+    [✅] python manage.py startapp monitoring
+    [✅] python manage.py startapp reports
+    [✅] pip install djangorestframework djangorestframework-simplejwt django-cors-headers requests reportlab celery django-celery-beat redis
+    [✅] Add all apps + corsheaders to INSTALLED_APPS
+    [✅] Configure CORS settings
+    [✅] Configure OPENNMS_BASE_URL, OPENNMS_USER, OPENNMS_PASSWORD in settings
+    [✅] Set up main urls.py with app url includes
+    [✅] Test server runs — python manage.py runserver
+
+-----------------------------------------
+
+[ all-done] USERS APP
+    [ ] models.py
+        [ ] CustomUser model (extends AbstractUser)
+        [ ] Add role field — choices: superadmin, admin, viewer
+    [ ] serializers.py
+        [ ] RegisterSerializer
+        [ ] LoginSerializer
+        [ ] UserSerializer
+    [ ] permissions.py
+        [ ] IsSuperAdmin permission class
+        [ ] IsAdminOrAbove permission class
+        [ ] IsViewerOrAbove permission class
+    [ ] views.py
+        [ ] RegisterView
+        [ ] LoginView
+        [ ] LogoutView
+        [ ] TokenRefreshView
+        [ ] UserProfileView
+        [ ] UserListView
+    [ ] urls.py
+        [ ] POST /api/auth/register/
+        [ ] POST /api/auth/login/
+        [ ] POST /api/auth/logout/
+        [ ] POST /api/auth/refresh/
+        [ ] GET  /api/auth/profile/
+        [ ] GET  /api/auth/users/
+    [ ] makemigrations + migrate
+    [ ] TEST in Postman
+        [ ] Register works
+        [ ] Login returns access + refresh tokens
+        [ ] Refresh token works
+        [ ] Logout blacklists token
+        [ ] Protected route rejects no token
+        [ ] Protected route rejects wrong role
+
+-----------------------------------------
+
+[🔨] MONITORING APP  (partially done)
+    [✅] opennms.py created with BASE, AUTH, HEADERS
+    [✅] fetch_alarms() helper
+    [✅] fetch_nodes() helper
+    [✅] HealthCheckView
+    [✅] AlarmListView
+    [✅] NodeListView
+    [✅] urls.py wired — health, nodes, alarms
+    [✅] Connected to React via Vite proxy
+
+    [ ] models.py
+        [ ] ThresholdRule model
+        [ ] NodeAction model
+        [ ] DiscoveryJob model
+    [ ] serializers.py
+        [ ] ThresholdRuleSerializer
+        [ ] NodeActionSerializer
+        [ ] DiscoveryJobSerializer
+    [ ] views.py
+        [ ] DashboardView
+        [ ] NodeBulkImportView
+        [ ] NodeDetailView
+        [ ] ThresholdRuleView
+        [ ] ThresholdRuleDetailView
+        [ ] NodeActionLogView
+        [ ] DiscoveryView
+        [ ] DiscoveryStatusView
+    [ ] opennms.py remaining helpers
+        [ ] fetch_dashboard_stats()
+        [ ] create_node()
+        [ ] delete_node()
+        [ ] bulk_create_nodes()
+        [ ] trigger_discovery()
+        [ ] fetch_nodes_since()
+    [ ] urls.py remaining routes
+        [ ] /api/dashboard/
+        [ ] /api/nodes/bulk/
+        [ ] /api/nodes/<id>/
+        [ ] /api/thresholds/
+        [ ] /api/thresholds/<id>/
+        [ ] /api/actions/
+        [ ] /api/actions/<id>/
+        [ ] /api/discovery/
+        [ ] /api/discovery/<id>/status/
+    [ ] makemigrations + migrate
+    [ ] TEST all endpoints in Postman
+
+-----------------------------------------
+
+[ ] REPORTS APP
+    [ ] generators.py
+        [ ] generate_csv(alarms)
+        [ ] generate_pdf(alarms, nodes)
+    [ ] views.py
+        [ ] DownloadCSVView
+        [ ] DownloadPDFView
+    [ ] urls.py
+        [ ] GET /api/reports/csv/
+        [ ] GET /api/reports/pdf/
+    [ ] TEST in Postman
+
+-----------------------------------------
+
+[ ] FINAL CHECKS
+    [ ] Flip AllowAny to IsAuthenticated in settings after users app done
+    [ ] All endpoints reject unauthenticated requests
+    [ ] CORS allows frontend origin only
+    [ ] OpenNMS credentials in .env not hardcoded
+    [ ] All migrations applied
+    [ ] Write API contract for v0.dev
