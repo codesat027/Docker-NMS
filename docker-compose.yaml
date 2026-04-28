@@ -22,16 +22,17 @@ services:
     image: opennms/horizon:latest
     container_name: opennms-server
     command: ["-s"]
-    ports:
-      - "8980:8980"
+    network_mode: host
     cap_add:
       - NET_RAW
       - NET_ADMIN
+    security_opt:
+      - seccomp:unconfined
     depends_on:
       database:
         condition: service_healthy
     environment:
-      - POSTGRES_HOST=database
+      - POSTGRES_HOST=127.0.0.1
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - TZ=Asia/Kolkata
@@ -46,8 +47,10 @@ services:
       context: ./Backend
       dockerfile: Dockerfile
     container_name: nms-backend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
-      - OPENNMS_BASE_URL=http://opennms:8980/opennms
+      - OPENNMS_BASE_URL=http://host.docker.internal:8980/opennms
       - OPENNMS_USERNAME=admin
       - OPENNMS_PASSWORD=admin
       - OPENNMS_FOREIGN_SOURCE=PulseMonitor
