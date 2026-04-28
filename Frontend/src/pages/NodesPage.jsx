@@ -180,7 +180,7 @@
 // function NodeForm({ node, onClose, onSubmit }) {
 //     const [form, setForm] = useState({
 //         label:          node?.label ?? "",
-//         foreignId:      node?.foreignId ?? crypto.randomUUID(),
+//         foreignId:      node?.foreignId ?? (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36)),
 //         foreignSource:  node?.foreignSource ?? "",
 //         ip:             node?.ipInterfaces?.[0]?.ipAddress ?? "",
 //         location:       node?.location ?? "Default",
@@ -607,7 +607,7 @@ export default function NodesPage() {
 function NodeForm({ node, onClose, onSubmit }) {
     const [form, setForm] = useState({
         label:          node?.label ?? "",
-        foreignId:      node?.foreignId ?? crypto.randomUUID(),
+        foreignId:      node?.foreignId ?? (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36)),
         foreignSource:  node?.foreignSource ?? "",
         ip:             node?.ipInterfaces?.[0]?.ipAddress ?? "",
         location:       node?.location ?? "Default",
