@@ -22,13 +22,12 @@ services:
     image: opennms/horizon:latest
     container_name: opennms-server
     command: ["-s"]
-    ports:
-      - "8980:8980"
+    network_mode: host
     depends_on:
       database:
         condition: service_healthy
     environment:
-      - POSTGRES_HOST=database
+      - POSTGRES_HOST=127.0.0.1
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - TZ=Asia/Kolkata
