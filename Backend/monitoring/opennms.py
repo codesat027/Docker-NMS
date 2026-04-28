@@ -172,21 +172,27 @@ def create_node(label, foreign_id, ip,
         }]
     }
 
+    node_xml = f"""<?xml version='1.0' encoding='UTF-8'?>
+<node foreign-id='{foreign_id}' node-label='{label}' building='{location}'>
+    <interface ip-addr='{ip}' snmp-primary='P' status='1'>
+        {services_xml}
+    </interface>
+    {assets_xml}
+</node>"""
+
     push = requests.post(
-        f"{BASE}/rest/requisitions",
+        f"{BASE}/rest/requisitions/{foreign_source}/nodes",
         auth=AUTH,
-         headers={
+        headers={
             "Content-Type": "application/xml",
             "Accept":       "application/json",
         },
-        data=xml_payload.encode("utf-8")
-        
-        
+        data=node_xml.encode("utf-8")
     )
     push.raise_for_status()
 
     requests.put(
-        f"{BASE}/rest/requisitions/{settings.OPENNMS_FOREIGN_SOURCE}/import",
+        f"{BASE}/rest/requisitions/{foreign_source}/import",
         auth=AUTH,
         headers={"Accept": "application/json"}
     )
