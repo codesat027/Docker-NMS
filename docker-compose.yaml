@@ -23,11 +23,7 @@ services:
     container_name: opennms-server
     command: ["-s"]
     network_mode: host
-    cap_add:
-      - NET_RAW
-      - NET_ADMIN
-    security_opt:
-      - seccomp:unconfined
+    privileged: true
     depends_on:
       database:
         condition: service_healthy
